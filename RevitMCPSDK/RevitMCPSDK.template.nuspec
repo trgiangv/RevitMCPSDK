@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+	<metadata>
+		<id>RevitMCPSDK</id>
+		<version>$version$</version>
+		<title>RevitMCPSDK for Revit $revitversion$</title>
+		<authors>Duong Tran Quang - DTDucas</authors>
+		<owners>Duong Tran Quang - DTDucas</owners>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<license type="expression">MIT</license>
+		<projectUrl>https://github.com/DTDucas/RevitMCPSDK</projectUrl>
+		<description>Revit MCP SDK for Revit $revitversion$ API development</description>
+		<releaseNotes>Initial release of RevitMCPSDK for Revit $revitversion$</releaseNotes>
+		<copyright>Copyright © Duong Tran Quang - DTDucas 2025</copyright>
+		<tags>Revit API SDK MCP Duong Tran Quang - DTDucas Revit$revitversion$</tags>
+		<dependencies>
+			<group targetFramework="$targetframework$">
+				<dependency id="Newtonsoft.Json" version="13.0.3" />
+			</group>
+		</dependencies>
+	</metadata>
+	<files>
+		<file src="README.md" target="" />
+		<file src="LICENSE.txt" target="" />
+
+		<file src="$binpath$\RevitMCPSDK.dll" target="lib\$targetframework$\RevitMCPSDK.dll" />
+		<file src="$binpath$\RevitMCPSDK.xml" target="lib\$targetframework$\RevitMCPSDK.xml" />
+		<file src="$binpath$\RevitMCPSDK.pdb" target="lib\$targetframework$\RevitMCPSDK.pdb" />
+	</files>
+</package>
