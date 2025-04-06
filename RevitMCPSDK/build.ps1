@@ -1,5 +1,5 @@
 $packageId = "RevitMCPSDK"
-$version = "1.0.0"
+$baseVersion = "0.0.0"
 $revitVersions = @("2020", "2021", "2022", "2023", "2024", "2025")
 $outputDir = ".\nupkg"
 $nugetPath = "nuget"
@@ -37,7 +37,7 @@ function Build-RevitVersion {
         return
     }
     
-    $packageVersion = "$version-R$revitVersion"
+   $packageVersion = "$revitVersion.$baseVersion"
     
     & $nugetPath pack "RevitMCPSDK.template.nuspec" -Properties "revitversion=$revitVersion;targetframework=$targetFramework;binpath=$binPath;version=$packageVersion" -OutputDirectory $outputDir -BasePath (Get-Location)
 }
