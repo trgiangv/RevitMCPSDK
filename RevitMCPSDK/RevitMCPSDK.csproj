@@ -20,11 +20,13 @@
 		<RepositoryUrl>https://github.com/DTDucas/RevitMCPSDK.git</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>Revit;API;SDK;MCP;Duong Tran Quang - DTDucas</PackageTags>
+		<PackageIcon>RevitMCPSDK.png</PackageIcon>
+		<Version>0.1</Version>
+		<FileVersion>0.1</FileVersion>
+		<AssemblyVersion>0.1</AssemblyVersion>
 
-		<!-- XML Documentation for IntelliSense -->
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<NoWarn>$(NoWarn);1591</NoWarn>
-		<!-- Suppress XML documentation warnings -->
 	</PropertyGroup>
 
 	<PropertyGroup Condition="$(Configuration.Contains('R20'))">
@@ -76,9 +78,33 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Resources\NewFolder\**" />
+	  <EmbeddedResource Remove="Resources\NewFolder\**" />
+	  <None Remove="Resources\NewFolder\**" />
+	  <Page Remove="Resources\NewFolder\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Remove="Resources\Icons\RevitMCPSDK.png" />
+	  <None Remove="Resources\Icons\RevitMCPSDK512.png" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="Nice3point.Revit.Api.RevitAPI" Version="$(RevitVersion).*" />
 		<PackageReference Include="Nice3point.Revit.Api.RevitAPIUI" Version="$(RevitVersion).*" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Resource Include="Resources\Icons\RevitMCPSDK.png" />
+	  <Resource Include="Resources\Icons\RevitMCPSDK512.png" />
+	  <Resource Include="Resources\Icons\RevitMCPSDK256.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="Resources\Icons\RevitMCPSDK.png" Pack="true" PackagePath="\" />
+		<None Include="Resources\Icons\RevitMCPSDK512.png" Pack="true" PackagePath="\" />
+		<None Include="Resources\Icons\RevitMCPSDK256.png" Pack="true" PackagePath="\" />
 	</ItemGroup>
 
 </Project>

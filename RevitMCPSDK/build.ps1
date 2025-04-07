@@ -1,5 +1,5 @@
 $packageId = "RevitMCPSDK"
-$baseVersion = "0.0.0"
+$baseVersion = "0.0.1"
 $revitVersions = @("2020", "2021", "2022", "2023", "2024", "2025")
 $outputDir = ".\nupkg"
 $nugetPath = "nuget"

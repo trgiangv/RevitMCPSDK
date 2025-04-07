@@ -8,11 +8,13 @@
 		<owners>Duong Tran Quang - DTDucas</owners>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<license type="expression">MIT</license>
+		<readme>README.md</readme>
 		<projectUrl>https://github.com/DTDucas/RevitMCPSDK</projectUrl>
 		<description>Revit MCP SDK for Revit $revitversion$ API development</description>
 		<releaseNotes>Initial release of RevitMCPSDK for Revit $revitversion$</releaseNotes>
 		<copyright>Copyright © Duong Tran Quang - DTDucas 2025</copyright>
 		<tags>Revit API SDK MCP Duong Tran Quang - DTDucas Revit$revitversion$</tags>
+		<icon>RevitMCPSDK512.png</icon>
 		<dependencies>
 			<group targetFramework="$targetframework$">
 				<dependency id="Newtonsoft.Json" version="13.0.3" />
@@ -22,6 +24,7 @@
 	<files>
 		<file src="README.md" target="" />
 		<file src="LICENSE.txt" target="" />
+		<file src="Resources\Icons\RevitMCPSDK512.png" target="" />
 
 		<file src="$binpath$\RevitMCPSDK.dll" target="lib\$targetframework$\RevitMCPSDK.dll" />
 		<file src="$binpath$\RevitMCPSDK.xml" target="lib\$targetframework$\RevitMCPSDK.xml" />
