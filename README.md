@@ -22,12 +22,17 @@ RevitMCPSDK is a comprehensive software development kit for Autodesk Revit that 
 The RevitMCPSDK is available as a NuGet package for each supported Revit version:
 
 ```
-Install-Package RevitMCPSDK -Version 1.0.0-R2020 // For Revit 2020
-Install-Package RevitMCPSDK -Version 1.0.0-R2021 // For Revit 2021
-Install-Package RevitMCPSDK -Version 1.0.0-R2022 // For Revit 2022
-Install-Package RevitMCPSDK -Version 1.0.0-R2023 // For Revit 2023
-Install-Package RevitMCPSDK -Version 1.0.0-R2024 // For Revit 2024
-Install-Package RevitMCPSDK -Version 1.0.0-R2025 // For Revit 2025
+Install-Package RevitMCPSDK -Version 2020.0.0.1 // For Revit 2020
+Install-Package RevitMCPSDK -Version 2021.0.0.1 // For Revit 2021
+Install-Package RevitMCPSDK -Version 2022.0.0.1 // For Revit 2022
+Install-Package RevitMCPSDK -Version 2023.0.0.1 // For Revit 2023
+Install-Package RevitMCPSDK -Version 2024.0.0.1 // For Revit 2024
+Install-Package RevitMCPSDK -Version 2025.0.0.1 // For Revit 2025
+```
+Or, if you prefer using PackageReference in your .csproj file:
+
+```xml
+<PackageReference Include="RevitMCPSDK" Version="$(RevitVersion).*" />
 ```
 
 ### Manual Installation
@@ -266,4 +271,4 @@ For support, please open an issue on the [GitHub repository](https://github.com/
 
 Duong Tran Quang - DTDucas
 
-Copyright © 2025 Duong Tran Quang - DTDucas
+Copyright Â© 2025 Duong Tran Quang - DTDucas
