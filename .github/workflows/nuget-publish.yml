@@ -8,6 +8,8 @@ on:
 jobs:
   build-and-publish:
     runs-on: windows-latest
+    env:
+      NUGET_AUTH_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
     
     steps:
     - name: Checkout repository
@@ -64,8 +66,6 @@ jobs:
       with:
         dotnet-version: 8.0.x
         source-url: https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
-      env:
-        NUGET_AUTH_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
     - name: Publish to GitHub Packages
       shell: pwsh
       run: |
