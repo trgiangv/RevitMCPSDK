@@ -21,24 +21,42 @@
 // SOFTWARE.
 //
 
-namespace RevitMCPSDK.API.Interfaces;
+using Autodesk.Revit.ApplicationServices;
+
+namespace RevitMCPSDK.API.Utils;
 
 /// <summary>
-///     Command registration interface
+///     Revit version adapter, used to handle compatibility issues between different versions
 /// </summary>
-public interface ICommandRegistry
+public class RevitVersionAdapter(Application app)
 {
-    /// <summary>
-    ///     Registers a command
-    /// </summary>
-    /// <param name="command">The command to register</param>
-    void RegisterCommand(IRevitCommand command);
+    private readonly Application _app = app ?? throw new ArgumentNullException(nameof(app));
 
     /// <summary>
-    ///     Tries to get a command
+    ///     Gets the current Revit version number
     /// </summary>
-    /// <param name="commandName">The name of the command</param>
-    /// <param name="command">The found command</param>
-    /// <returns>Whether the command was found</returns>
-    bool TryGetCommand(string commandName, out IRevitCommand command);
+    public string GetRevitVersion()
+    {
+        // Get the major version number, e.g., "2022"
+        return _app.VersionNumber;
+    }
+
+    /// <summary>
+    ///     Checks if the current Revit version supports the specified command
+    /// </summary>
+    /// <param name="supportedVersions">List of supported versions for the command</param>
+    /// <returns>Whether the current version is supported</returns>
+    public bool IsVersionSupported(IEnumerable<string> supportedVersions)
+    {
+        if (supportedVersions == null || !supportedVersions.GetEnumerator().MoveNext())
+            return true; // If no supported versions are specified, default to supporting all versions
+
+        var currentVersion = GetRevitVersion();
+
+        foreach (var version in supportedVersions)
+            if (currentVersion == version)
+                return true;
+
+        return false;
+    }
 }

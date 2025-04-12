@@ -21,32 +21,31 @@
 // SOFTWARE.
 //
 
-using RevitMCPSDK.API.Models;
+using RevitMCPSDK.API.Models.JsonRPC;
 
-namespace RevitMCPSDK.Exceptions
+namespace RevitMCPSDK.Exceptions;
+
+public class CommandExecutionException : Exception
 {
-    public class CommandExecutionException : Exception
+    public CommandExecutionException(string message)
+        : base(message)
     {
-        public int ErrorCode { get; }
-        public object ErrorData { get; }
-
-        public CommandExecutionException(string message)
-            : base(message)
-        {
-            ErrorCode = JsonRPCErrorCodes.InternalError;
-        }
-
-        public CommandExecutionException(string message, int errorCode)
-            : base(message)
-        {
-            ErrorCode = errorCode;
-        }
-
-        public CommandExecutionException(string message, int errorCode, object errorData)
-            : base(message)
-        {
-            ErrorCode = errorCode;
-            ErrorData = errorData;
-        }
+        ErrorCode = JsonRPCErrorCodes.InternalError;
     }
+
+    public CommandExecutionException(string message, int errorCode)
+        : base(message)
+    {
+        ErrorCode = errorCode;
+    }
+
+    public CommandExecutionException(string message, int errorCode, object errorData)
+        : base(message)
+    {
+        ErrorCode = errorCode;
+        ErrorData = errorData;
+    }
+
+    public int ErrorCode { get; }
+    public object ErrorData { get; }
 }

@@ -21,17 +21,12 @@
 // SOFTWARE.
 //
 
-namespace RevitMCPSDK.Exceptions;
+namespace RevitMCPSDK.API.Constants;
 
-public class ConfigurationException : Exception
+/// <summary>
+///     Constants for Revit operations
+/// </summary>
+public static class RevitConstants
 {
-    public ConfigurationException(string message)
-        : base(message)
-    {
-    }
-
-    public ConfigurationException(string message, Exception innerException)
-        : base(message, innerException)
-    {
-    }
+   
 }

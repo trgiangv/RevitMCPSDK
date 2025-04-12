@@ -21,17 +21,36 @@
 // SOFTWARE.
 //
 
-namespace RevitMCPSDK.Exceptions;
+using Autodesk.Revit.DB;
 
-public class ConfigurationException : Exception
+namespace RevitMCPSDK.API.Extensions;
+
+/// <summary>
+///     Extension methods for Revit Document class
+/// </summary>
+public static class DocumentExtensions
 {
-    public ConfigurationException(string message)
-        : base(message)
+    /// <summary>
+    ///     Finds the nearest level to the specified elevation
+    /// </summary>
+    /// <param name="doc">The Revit document</param>
+    /// <param name="elevation">Target elevation in feet</param>
+    /// <returns>The nearest level or null if no levels exist</returns>
+    public static Level FindNearestLevel(this Document doc, double elevation)
     {
-    }
+        if (doc == null)
+            throw new ArgumentNullException(nameof(doc));
 
-    public ConfigurationException(string message, Exception innerException)
-        : base(message, innerException)
-    {
+        var levels = new FilteredElementCollector(doc)
+            .OfClass(typeof(Level))
+            .Cast<Level>()
+            .ToList();
+
+        if (!levels.Any())
+            return null;
+
+        return levels
+            .OrderBy(level => Math.Abs(level.Elevation - elevation))
+            .FirstOrDefault();
     }
 }
