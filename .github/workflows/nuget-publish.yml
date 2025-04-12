@@ -31,12 +31,23 @@ jobs:
         $baseVersion = "beta"
         
         if (Test-Path $buildPath) {
-          $baseVersion = Get-Content -Path $buildPath | Select-String -Pattern '\$baseVersion\s*=\s*"([^"]+)"' | ForEach-Object { $_.Matches.Groups[1].Value }
+          try {
+            $content = Get-Content -Path $buildPath -Raw
+            if ($content -match '\$baseVersion\s*=\s*"([^"]+)"') {
+              $baseVersion = $matches[1]
+              echo "Found baseVersion: $baseVersion in file"
+            } else {
+              echo "Pattern not found in file, using default"
+            }
+          } catch {
+            echo "Error reading file: $_"
+          }
         }
         
         $tagName = "${{ github.ref }}"
-        if ($tagName -match 'refs/tags/v(.+)') {
+        if ($tagName -match 'refs/tags/v?(.+)') {
           $baseVersion = $matches[1]
+          echo "Using tag version: $baseVersion"
         }
         
         echo "BASE_VERSION=$baseVersion" >> $env:GITHUB_ENV
@@ -45,12 +56,19 @@ jobs:
       shell: pwsh
       run: |
         $buildPath = "${{ env.BUILD_PATH }}"
+        $baseVersion = "${{ env.BASE_VERSION }}"
         
         if (Test-Path $buildPath) {
-          if ("${{ github.ref }}" -match 'refs/tags/v') {
-            $buildScript = Get-Content -Path $buildPath -Raw
-            $buildScript = $buildScript -replace '(\$baseVersion\s*=\s*")[^"]+(")','$1${{ env.BASE_VERSION }}$2'
-            Set-Content -Path $buildPath -Value $buildScript
+          if ("${{ github.ref }}" -match 'refs/tags/') {
+            try {
+              echo "Using version $baseVersion from tag"
+              $content = Get-Content -Path $buildPath -Raw
+              $updatedContent = $content -replace '(\$baseVersion\s*=\s*")[^"]+(")','$1' + $baseVersion + '$2'
+              Set-Content -Path $buildPath -Value $updatedContent -Encoding UTF8
+            } catch {
+              echo "Error updating file: $_"
+              cat $buildPath
+            }
           }
           
           cd (Split-Path -Path $buildPath)
@@ -70,7 +88,8 @@ jobs:
         
         if (Test-Path $nupkgPath) {
           foreach ($nupkg in Get-ChildItem -Path "$nupkgPath/*.nupkg") {
-            dotnet nuget push $nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
+            echo "Publishing $nupkg to NuGet.org"
+            nuget push $nupkg -ApiKey "${{ secrets.NUGET_API_KEY }}" -Source "https://api.nuget.org/v3/index.json" -SkipDuplicate
           }
         } else {
           Write-Error "Cannot find NuGet packages"
