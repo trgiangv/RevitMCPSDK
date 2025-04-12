@@ -8,8 +8,6 @@ on:
 jobs:
   build-and-publish:
     runs-on: windows-latest
-    env:
-      NUGET_AUTH_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
     
     steps:
     - name: Checkout repository
@@ -59,27 +57,6 @@ jobs:
           ./build.ps1
         } else {
           Write-Error "Cannot find build script at $buildPath"
-          exit 1
-        }
-    - name: Setup GitHub Packages
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.0.x
-        source-url: https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
-    - name: Publish to GitHub Packages
-      shell: pwsh
-      run: |
-        $nupkgPath = "RevitMCPSDK/nupkg"
-        if (!(Test-Path $nupkgPath)) {
-          $nupkgPath = "./nupkg"
-        }
-        
-        if (Test-Path $nupkgPath) {
-          foreach ($nupkg in Get-ChildItem -Path "$nupkgPath/*.nupkg") {
-            dotnet nuget push $nupkg --api-key ${{ secrets.PACKAGES_TOKEN }} --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" --skip-duplicate
-          }
-        } else {
-          Write-Error "Cannot find NuGet packages"
           exit 1
         }
     - name: Publish to NuGet.org
