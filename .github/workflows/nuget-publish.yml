@@ -77,9 +77,16 @@ jobs:
           Write-Error "Cannot find build script at $buildPath"
           exit 1
         }
-    - name: Publish to NuGet.org
-      shell: pwsh
+        
+    - name: Setup NuGet API Key
       if: startsWith(github.ref, 'refs/tags/')
+      shell: pwsh
+      run: |
+        nuget setApiKey "${{ secrets.NUGET_API_KEY }}" -Source "https://api.nuget.org/v3/index.json"
+        
+    - name: Publish to NuGet.org
+      if: startsWith(github.ref, 'refs/tags/')
+      shell: pwsh
       run: |
         $nupkgPath = "RevitMCPSDK/nupkg"
         if (!(Test-Path $nupkgPath)) {
@@ -89,7 +96,7 @@ jobs:
         if (Test-Path $nupkgPath) {
           foreach ($nupkg in Get-ChildItem -Path "$nupkgPath/*.nupkg") {
             echo "Publishing $nupkg to NuGet.org"
-            nuget push $nupkg -ApiKey "${{ secrets.NUGET_API_KEY }}" -Source "https://api.nuget.org/v3/index.json" -SkipDuplicate
+            dotnet nuget push $nupkg --api-key "${{ secrets.NUGET_API_KEY }}" --source "https://api.nuget.org/v3/index.json" --skip-duplicate --no-symbols
           }
         } else {
           Write-Error "Cannot find NuGet packages"
