@@ -1,12 +1,10 @@
 name: Build and Publish NuGet Packages
-
 on:
   push:
     branches: [ main ]
     tags:
       - 'v*'
   workflow_dispatch:
-
 jobs:
   build-and-publish:
     runs-on: windows-latest
@@ -21,18 +19,16 @@ jobs:
         dotnet-version: |
           8.0.x
           6.0.x
-
     - name: Setup NuGet
       uses: NuGet/setup-nuget@v1
       with:
         nuget-version: '6.x'
-
     - name: Determine version
       id: get_version
       shell: pwsh
       run: |
         $buildPath = "RevitMCPSDK/build.ps1"
-        $baseVersion = "0.0.2" # Default version
+        $baseVersion = "beta"
         
         if (Test-Path $buildPath) {
           $baseVersion = Get-Content -Path $buildPath | Select-String -Pattern '\$baseVersion\s*=\s*"([^"]+)"' | ForEach-Object { $_.Matches.Groups[1].Value }
@@ -45,7 +41,6 @@ jobs:
         
         echo "BASE_VERSION=$baseVersion" >> $env:GITHUB_ENV
         echo "BUILD_PATH=$buildPath" >> $env:GITHUB_ENV
-
     - name: Build NuGet packages
       shell: pwsh
       run: |
@@ -64,15 +59,13 @@ jobs:
           Write-Error "Cannot find build script at $buildPath"
           exit 1
         }
-
     - name: Setup GitHub Packages
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
         source-url: https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
       env:
-        NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+        NUGET_AUTH_TOKEN: ${{ secrets.PACKAGES_TOKEN }}
     - name: Publish to GitHub Packages
       shell: pwsh
       run: |
@@ -83,13 +76,12 @@ jobs:
         
         if (Test-Path $nupkgPath) {
           foreach ($nupkg in Get-ChildItem -Path "$nupkgPath/*.nupkg") {
-            dotnet nuget push $nupkg --api-key ${{ secrets.GITHUB_TOKEN }} --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" --skip-duplicate
+            dotnet nuget push $nupkg --api-key ${{ secrets.PACKAGES_TOKEN }} --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" --skip-duplicate
           }
         } else {
           Write-Error "Cannot find NuGet packages"
           exit 1
         }
-
     - name: Publish to NuGet.org
       shell: pwsh
       if: startsWith(github.ref, 'refs/tags/')
@@ -107,7 +99,6 @@ jobs:
           Write-Error "Cannot find NuGet packages"
           exit 1
         }
-
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v1
       if: startsWith(github.ref, 'refs/tags/')
